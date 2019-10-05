@@ -11,10 +11,11 @@ metadata:                  #资源的元数据/属性
 spec:                      #设置该资源的内容
   restartPolicy: Always    #表示自动重启，一直都会有这个容器运行
   nodeSelector:            #选择node节点14     zone: node1
+    - name: node1
   containers:
     - name: django-pod        #容器的名字
       image: django:v1.1      #容器使用的镜像地址
-      imagePullPolicy: Never #三个选择Always、Never、IfNotPresent，每次启动时检查和更新（从registery）images的策略，
+      imagePullPolicy: Never
       # Always，每次都检查
       # Never，每次都不检查（不管本地是否有）
       # IfNotPresent，如果本地有就不检查，如果没有就拉取

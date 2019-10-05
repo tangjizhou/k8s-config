@@ -1,0 +1,50 @@
+# mysql服务，需要持久化数据，需要挂载磁盘
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0.17
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+          env:
+            # name指定为MYSQL_ROOT_PASSWORD，可参考docker官方mysql镜像说明
+            - name: MYSQL_ROOT_PASSWORD
+              value: "rootpass"
+          # 挂载在容器中的位置，为容器中的路径
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-storage
+      # 本地磁盘配置，提供本地磁盘信息
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            # 名字为对应的pvc(PersistentVolumeClaim)名字
+            claimName: mysql-pvc
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: "TCP"
+      port: 3306
+      targetPort: 3306
+      nodePort: 32699
+  type: NodePort
