@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kubernates-dashboard
+  namespace: kube-system
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`kubernetes.docker.internal`) && PathPrefix(`/kubernates-dashboard/`)
+      kind: Rule
+      services:
+        - name: kubernates-dashboard
+          port: 8080
