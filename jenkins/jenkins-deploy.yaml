@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins
-  namespace: twisted-fate
+  namespace: base-env
   labels:
     app: jenkins
 spec:
@@ -15,9 +15,32 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: jenkins:2.60.3
+          image: registry.cn-shanghai.aliyuncs.com/twisted-fate/jenkins:2.2
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /var/jenkins_home
+              name: jenkins
       restartPolicy: Always
+      volumes:
+        - name: jenkins
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
   selector:
     matchLabels:
       app: jenkins
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  namespace: base-env
+spec:
+  selector:
+    app: jenkins
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: web
+      protocol: TCP
+      nodePort: 30088
+  type: NodePort
