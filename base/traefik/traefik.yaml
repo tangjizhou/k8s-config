@@ -31,6 +31,8 @@ spec:
           args:
             - --entrypoints.web.Address=:80
             - --entrypoints.websecure.Address=:443
+            - --entrypoints.mysql.Address=:3306
+            - --entrypoints.redis.Address=:6379
             - --api.insecure=true
             - --providers.kubernetescrd
             - --api
@@ -62,4 +64,13 @@ spec:
       port: 443
       name: websecure
       nodePort: 30443
+    - protocol: TCP
+      port: 3306
+      name: mysql
+      nodePort: 30306
+
+    - protocol: TCP
+      port: 6379
+      name: redis
+      nodePort: 30637
   type: NodePort

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: registry.cn-shanghai.aliyuncs.com/twisted-fate/jenkins:2.2
+          image: registry.cn-shanghai.aliyuncs.com/twisted-fate/jenkins:2.210-jdk11
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /var/jenkins_home
