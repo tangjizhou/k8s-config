@@ -1,3 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql
+  namespace: base-env
+type: Opaque
+data:
+  root_password: "cm9vdHBhc3M="
+---
 # mysql服务，需要持久化数据，需要挂载磁盘
 apiVersion: apps/v1
 kind: Deployment
@@ -23,7 +32,10 @@ spec:
           env:
             # name指定为MYSQL_ROOT_PASSWORD，可参考docker官方mysql镜像说明
             - name: MYSQL_ROOT_PASSWORD
-              value: "rootpass"
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: root_password
           # 挂载在容器中的位置，为容器中的路径
           volumeMounts:
             - mountPath: /var/lib/mysql
