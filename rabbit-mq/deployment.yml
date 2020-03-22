@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-pvc
+  namespace: base-env
+spec:
+  storageClassName: rook-ceph-block
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 300Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  namespace: base-env
+  labels:
+    app: rabbitmq
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: rabbitmq
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3.8.3
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /var/lib/rabbitmq
+              name: rabbitmq
+      restartPolicy: Always
+      volumes:
+        - name: rabbitmq
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc
+  selector:
+    matchLabels:
+      app: rabbitmq
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: base-env
+  labels:
+    app: rabbitmq
+spec:
+  ports:
+    - port: 15672
+      name: http
+      protocol: TCP
+    - port: 5672
+      name: amqp
+      protocol: TCP
+    - port: 25672
+      name: clustering
+      protocol: TCP
+  selector:
+    app: rabbitmq

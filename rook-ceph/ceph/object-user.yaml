@@ -1,8 +1,8 @@
 apiVersion: ceph.rook.io/v1
 kind: CephObjectStoreUser
 metadata:
-  name: my-user
+  name: rook-ceph-store-user
   namespace: rook-ceph
 spec:
-  store: my-store
-  displayName: "my display name"
+  store: rook-ceph-store
+  displayName: "tangjizhou"

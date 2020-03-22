@@ -47,7 +47,7 @@ metadata:
   name: redis-pvc
   namespace: base-env
 spec:
-  storageClassName: redis
+  storageClassName: rook-ceph-block
   accessModes:
     - ReadWriteOnce
   resources:
