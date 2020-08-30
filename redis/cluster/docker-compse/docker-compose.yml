@@ -1,0 +1,116 @@
+version: '3'
+services:
+  master-1:
+    container_name: master-1
+    image: redis
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /etc/usr/local/ && echo > redis.conf
+        cat << EOF > redis.conf
+        port 6379
+        bind 0.0.0.0
+        cluster-enabled yes
+        logfile "/usr/local/redis/logs/redis-server.log"
+        EOF
+        redis-server /etc/usr/local/redis.conf
+    network_mode: "host"
+    volumes:
+      - /data/redis-cluster/redis/master1/:/etc/usr/local/
+      - /data/redis-cluster/redis/master1/:/usr/local/redis/logs/
+  master-2:
+    container_name: master-2
+    image: redis
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /etc/usr/local/ && echo > redis.conf
+        cat << EOF > redis.conf
+        port 6380
+        bind 0.0.0.0
+        cluster-enabled yes
+        logfile "/usr/local/redis/logs/redis-server.log"
+        EOF
+        redis-server /etc/usr/local/redis.conf
+    network_mode: "host"
+    volumes:
+      - /data/redis-cluster/redis/master2/:/etc/usr/local/
+      - /data/redis-cluster/redis/master2/:/usr/local/redis/logs/
+  master-3:
+    container_name: master-3
+    image: redis
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /etc/usr/local/ && echo > redis.conf
+        cat << EOF > redis.conf
+        port 6381
+        bind 0.0.0.0
+        cluster-enabled yes
+        logfile "/usr/local/redis/logs/redis-server.log"
+        EOF
+        redis-server /etc/usr/local/redis.conf
+    network_mode: "host"
+    volumes:
+      - /data/redis-cluster/redis/master3/:/etc/usr/local/
+      - /data/redis-cluster/redis/master3/:/usr/local/redis/logs/
+  slave-1:
+    container_name: slave-1
+    image: redis
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /etc/usr/local/ && echo > redis.conf
+        cat << EOF > redis.conf
+        port 6382
+        bind 0.0.0.0
+        cluster-enabled yes
+        logfile "/usr/local/redis/logs/redis-server.log"
+        EOF
+        redis-server /etc/usr/local/redis.conf
+    network_mode: "host"
+    volumes:
+      - /data/redis-cluster/redis/slave1/:/etc/usr/local/
+      - /data/redis-cluster/redis/slave1/:/usr/local/redis/logs/
+  slave-2:
+    container_name: slave-2
+    image: redis
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /etc/usr/local/ && echo > redis.conf
+        cat << EOF > redis.conf
+        port 6383
+        bind 0.0.0.0
+        cluster-enabled yes
+        logfile "/usr/local/redis/logs/redis-server.log"
+        EOF
+        redis-server /etc/usr/local/redis.conf
+    network_mode: "host"
+    volumes:
+      - /data/redis-cluster/redis/slave2/:/etc/usr/local/
+      - /data/redis-cluster/redis/slave2/:/usr/local/redis/logs/
+  slave-3:
+    container_name: slave-3
+    image: redis
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /etc/usr/local/ && echo > redis.conf
+        cat << EOF > redis.conf
+        port 6384
+        bind 0.0.0.0
+        cluster-enabled yes
+        logfile "/usr/local/redis/logs/redis-server.log"
+        EOF
+        redis-server /etc/usr/local/redis.conf
+    network_mode: "host"
+    volumes:
+      - /data/redis-cluster/redis/slave3/:/etc/usr/local/
+      - /data/redis-cluster/redis/slave3/:/usr/local/redis/logs/
