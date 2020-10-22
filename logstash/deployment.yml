@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+  namespace: kube-system
+  labels:
+    app: logstash
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: logstash
+      labels:
+        app: logstash
+    spec:
+      containers:
+        - name: logstash
+          image: docker.elastic.co/logstash/logstash:7.9.2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5044
+            - containerPort: 5061
+            - containerPort: 9600
+          volumeMounts:
+            - mountPath: /usr/share/logstash/pipeline/logstash.conf
+              name: logstash-conf
+              subPath: logstash.conf
+      restartPolicy: Always
+
+      volumes:
+        - name: logstash-conf
+          configMap:
+            name: logstash-conf
+            defaultMode: 0777
+  selector:
+    matchLabels:
+      app: logstash
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-conf
+  namespace: kube-system
+data:
+  logstash.conf: |-
+    input {
+      beats {
+        port => 5044
+      }
+    }
+
+    output {
+      #stdout {
+      #  codec => rubydebug
+      #}
+      file {
+        path => "/usr/share/logstash/output.log"
+      }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash
+  namespace: kube-system
+spec:
+  selector:
+    app: logstash
+  ports:
+    - port: 5044
+  type: ClusterIP
+

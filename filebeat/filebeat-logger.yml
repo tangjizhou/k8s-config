@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filebeat-logger
+  namespace: elk
+  labels:
+    app: filebeat-logger
+spec:
+  replicas: 0
+  template:
+    metadata:
+      name: filebeat-logger
+      labels:
+        app: filebeat-logger
+    spec:
+      containers:
+        - name: filebeat-logger
+          image: openjdk:8
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - i=0;while true; i=$((i+1));do echo "====================" + $i + "===================="; done
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: filebeat-logger
