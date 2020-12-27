@@ -1,5 +1,6 @@
+docker-compose down
+rm -rf redis
 docker-compose up -d
-
-docker exec -it "$(docker ps | grep redis| grep master-1 | awk '{print $1}')" /bin/bash
-
-redis-cli --cluster create 192.168.101.2:6379 192.168.101.2:6380 192.168.101.2:6381 192.168.101.2:6382 192.168.101.2:6383 192.168.101.2:6384 --cluster-replicas 1
+container=$(docker ps | grep redis| grep master-1 | awk '{print $1}')
+ip=$(ifconfig | grep 192 | awk '{print $2}' | grep 192)
+docker exec -it $container redis-cli --cluster create "$ip:6379" "$ip:6380" "$ip:6381" "$ip:6382" "$ip:6383" "$ip:6384" --cluster-replicas 1 --cluster-yes
