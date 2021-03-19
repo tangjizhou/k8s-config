@@ -1,13 +1,11 @@
 version: '3'
 services:
   mysql:
-    image: mysql:8.0.17
+    image: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'admin'
-    expose:
-      - '3306'
     ports:
       - '3306:3306'
     volumes:
-      - /data/mysql:/var/lib/mysql
+      - ./data:/var/lib/mysql

@@ -1,0 +1,6 @@
+version: '3'
+services:
+  jrebel:
+    image: registry.cn-shanghai.aliyuncs.com/twisted-fate/jrebel-server:1.0.0
+    network_mode: host
+    restart: always
