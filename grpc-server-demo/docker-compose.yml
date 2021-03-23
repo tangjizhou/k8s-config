@@ -1,0 +1,7 @@
+version: '3'
+services:
+  grpc-server-demo:
+    image: registry.cn-shanghai.aliyuncs.com/twisted-fate/grpc-demo-server:1.0
+    restart: always
+    ports:
+    - "50051:50051"
